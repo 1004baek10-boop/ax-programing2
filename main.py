@@ -17,7 +17,19 @@ SHELTER_CSV = os.path.join(DATA_DIR, "shelters.csv")
 POPULATION_CSV = os.path.join(DATA_DIR, "population_dong.csv")
 
 
+def check_data_files(*paths):
+    """데이터 파일이 있는지 먼저 확인하고, 없으면 어디를 찾았는지 알려준다."""
+    missing = [p for p in paths if not os.path.isfile(p)]
+    if missing:
+        raise FileNotFoundError(
+            "데이터 파일이 없습니다. 아래 경로에 파일을 올려 주세요:\n  "
+            + "\n  ".join(missing)
+            + "\n(data 폴더는 main.py와 같은 위치에 있어야 합니다)"
+        )
+
+
 def run_pipeline(shelter_csv=SHELTER_CSV, population_csv=POPULATION_CSV, out_dir=OUT_DIR):
+    check_data_files(shelter_csv, population_csv)
     os.makedirs(out_dir, exist_ok=True)
 
     # ① 공급 집계 (F1)
