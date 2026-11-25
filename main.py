@@ -13,8 +13,19 @@ import analysis
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 OUT_DIR = os.path.join(BASE_DIR, "output")
-SHELTER_CSV = os.path.join(DATA_DIR, "shelters.csv")
-POPULATION_CSV = os.path.join(DATA_DIR, "population_dong.csv")
+
+
+def find_file(name):
+    """data/ 폴더 또는 main.py와 같은 폴더에서 파일을 찾는다. 둘 다 없으면 data/ 경로를 돌려준다."""
+    for folder in (DATA_DIR, BASE_DIR):
+        path = os.path.join(folder, name)
+        if os.path.isfile(path):
+            return path
+    return os.path.join(DATA_DIR, name)
+
+
+SHELTER_CSV = find_file("shelters.csv")
+POPULATION_CSV = find_file("population_dong.csv")
 
 
 def check_data_files(*paths):
