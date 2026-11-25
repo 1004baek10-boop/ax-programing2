@@ -4,13 +4,9 @@
 """
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 KEY = "구"  # 병합 기준 키 (계획서 부록 3번: 지역명 기준으로 확정)
 
-# 한글 폰트 후보 (코랩: NanumGothic 설치 후 사용, 로컬: 맑은 고딕 등)
-plt.rcParams["font.family"] = ["NanumGothic", "Malgun Gothic", "AppleGothic", "DejaVu Sans"]
-plt.rcParams["axes.unicode_minus"] = False
 
 
 def merge_data(supply, demand):
@@ -51,7 +47,21 @@ def rank_regions(df):
 
 
 def plot_results(ranked, save_path=None):
-    """지역별 수용률과 취약도 점수를 막대 그래프로 그린다 (F5)."""
+    """지역별 수용률과 취약도 점수를 막대 그래프로 그린다 (F5).
+
+    matplotlib은 그래프를 그릴 때만 불러온다. 설치되어 있지 않아도
+    공급·수요·병합·지표 계산은 그대로 실행된다.
+    """
+    try:
+        import matplotlib.pyplot as plt
+    except ModuleNotFoundError:
+        print("[안내] matplotlib이 없어 그래프를 건너뜁니다. requirements.txt에 matplotlib을 추가하세요.")
+        return None
+
+    # 한글 폰트 후보 (코랩: NanumGothic 설치 후 사용, 로컬: 맑은 고딕 등)
+    plt.rcParams["font.family"] = ["NanumGothic", "Malgun Gothic", "AppleGothic", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 
     axes[0].bar(ranked[KEY], ranked["수용률(%)"], color="#4C78A8")
